@@ -1,0 +1,10 @@
+﻿  ApplicationClass.cpp
+  GraphicsClass.cpp
+D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\GraphicsClass.cpp(15,7): warning C4101: 'result' :참조되지 않은 지역 변수입니다.
+  InputClass.cpp
+  WinMain.cpp
+  코드를 생성하고 있습니다...
+ApplicationClass.obj : error LNK2019: "public: __thiscall GraphicsClass::GraphicsClass(void)" (??0GraphicsClass@@QAE@XZ)"public: bool __thiscall ApplicationClass::Initialize(struct HINSTANCE__ *,bool,int,int)" (?Initialize@ApplicationClass@@QAE_NPAUHINSTANCE__@@_NHH@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+ApplicationClass.obj : error LNK2019: "public: __thiscall GraphicsClass::~GraphicsClass(void)" (??1GraphicsClass@@QAE@XZ)"public: void * __thiscall GraphicsClass::`scalar deleting destructor'(unsigned int)" (??_GGraphicsClass@@QAEPAXI@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+MSVCRTD.lib(exe_main.obj) : error LNK2019: _main"int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+D:\C_C++_Project\sbsGame\DirectX\DirectX1\Debug\DirectX1.exe : fatal error LNK1120: 3개의 확인할 수 없는 외부 참조입니다.
