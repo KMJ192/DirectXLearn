@@ -28,7 +28,7 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 	result = _D3DC->Initialize(screenW, screenH, _Vsync_enabled, hWnd, isFullScreen, _SDepth, _SNear);
 	if (!result)
 	{
-		MessageBox(hWnd, _T("Could not initialize Direct#d"), _T("Error"), MB_OK);
+		MessageBox(hWnd, _T("Could not initialize Direct3D"), _T("Error"), MB_OK);
 		return false;
 	}
 
@@ -69,8 +69,10 @@ bool GraphicsClass::Render()
 	_D3DC->BeginScene(1.0f, 1.0f, 0.0f, 1.0f); //화면 Color 표시
 
 	//화면에 그림을 그리는 Rendering 작업
+	//Camera -> 그릴 대상에 대한 정점 정보
 
 	//버퍼에 그려진 Scene을 화면에 표시
 	_D3DC->EndScene();
+
 	return true;
 }

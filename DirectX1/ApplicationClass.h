@@ -1,5 +1,6 @@
 #pragma once
 
+class GraphicsClass;
 class ApplicationClass : public Singleton<ApplicationClass>
 {
 private:

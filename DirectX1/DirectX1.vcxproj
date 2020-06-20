@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ApplicationClass.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="D3DClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationClass.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="D3DClass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />

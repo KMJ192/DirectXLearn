@@ -1,4 +1,5 @@
 #include "Stdafx.h"
+#include "GraphicsClass.h"
 #include "ApplicationClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

@@ -115,6 +115,7 @@ void D3DClass::BeginScene(float red, float green, float blue, float alpha)
 
 void D3DClass::EndScene()
 {
+	//GraphicsClass의 Render에서 호출됨
 	//렌더링이 완로되었으므로 백버퍼의 내용을 화면에 표시
 	if (_Vsync_enabled) {
 		//새로고침 비율을 고정
@@ -157,7 +158,7 @@ bool D3DClass::CreateDeviceNContext()
 #if defined(DEBUG) || defined(_DEBUG) //디버그모드일때 디버그 계층 활성화
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	D3D_FEATURE_LEVEL featureLevel; //D3D특징 레벨
+	D3D_FEATURE_LEVEL featureLevel;		//D3D특징 레벨
 	HRESULT hr = D3D11CreateDevice(
 		0,													//기본 어뎁터
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -186,7 +187,8 @@ bool D3DClass::CreateDeviceNContext()
 
 bool D3DClass::CheckQualityLevels(UINT* m4xMsaaQuality)
 {
-	HRESULT hr = _Device->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM,4, m4xMsaaQuality);
+	//안티 앨리어싱 기술 지원 Check
+	HRESULT hr = _Device->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 4, m4xMsaaQuality);
 	if (FAILED(hr)) 
 	{
 		MessageBox(NULL, _T("4XMSAA Failed"), NULL, MB_OK);
@@ -239,6 +241,7 @@ void D3DClass::FillSwapChainSt(int screenW, int screenH, HWND hWnd, bool IsFullS
 
 }
 
+//교환 사슬 생성
 bool D3DClass::CreateSwapChain(DXGI_SWAP_CHAIN_DESC *swapChainDesc)
 {
 	IDXGIDevice* dxgiDevice = NULL;
@@ -248,6 +251,7 @@ bool D3DClass::CreateSwapChain(DXGI_SWAP_CHAIN_DESC *swapChainDesc)
 		return false;
 	}
 
+	//dxgiAdapter을 이용하여 dxgiFactory생성, dxgiFactory을 이용하여 _SwapChain생성
 	IDXGIAdapter* dxgiAdapter = NULL;
 	hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 	if (FAILED(hr)) {
@@ -281,6 +285,7 @@ bool D3DClass::CreateSwapChain(DXGI_SWAP_CHAIN_DESC *swapChainDesc)
 	return true;
 }
 
+//렌더 대상 View의 생성
 void D3DClass::CreateRenderTargetV()
 {
 	ID3D11Texture2D* backBuffer = NULL;
@@ -328,6 +333,7 @@ bool D3DClass::CreatedepthNStencil(int screenW, int screenH, UINT m4xMsaaQuality
 	}
 	//Stencil상태의 description을 초기화
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+	//depthStencilDesc->Buffer를 만드는 설정
 	//Stencil상태의 description을 작성
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -381,6 +387,7 @@ bool D3DClass::PiplineBindeing()
 
 	D3D11_RASTERIZER_DESC rasterDesc;
 	//어떤걸 어떻게 그릴지에 대한 Rasterizer description 작성
+	//화면에 그려지는 모양 설정
 	rasterDesc.AntialiasedLineEnable = false;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.DepthBias = 0;
@@ -398,7 +405,7 @@ bool D3DClass::PiplineBindeing()
 	{
 		return false;
 	}
-
+	//Rasterizer 상태 설정
 	_DeviceContext->RSSetState(_RasterState);
 
 	return true;
@@ -408,6 +415,7 @@ void D3DClass::SettingViewPort(int screenW, int screenH, float sDepth, float sNe
 {
 	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
+	//Create ViewPort for randering
 	viewport.Width = (float)screenW;
 	viewport.Height = (float)screenH;
 	viewport.MinDepth = 0.0f;
@@ -419,16 +427,18 @@ void D3DClass::SettingViewPort(int screenW, int screenH, float sDepth, float sNe
 	_DeviceContext->RSSetViewports(1, &viewport);
 
 	//투영 행렬 설정
+	//fieldOfView -> 시야 각 //XM_PI -> 180도 -> 180/4 = 45도(시야각)
 	fieldOfView = (float)XM_PI / 4.0f;
 	screenAspect = (float)screenW / (float)screenH;
-	
 	//3D 렌더링을 위한 투영행렬을 생성
 	//(D3DMatrixPerspectiveFovLH)
+	//sDepth : 최대 시야 거리
 	_ProjectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, sNear, sDepth);
 
 	//월드 행렬을 단위 행렬로 초기화. (D3DXMatrixIdentity)
 	_WorldMatrix = XMMatrixIdentity();
 
-	//2D렌더링에 사용될 정사영 행렬을 생성
+	//2D렌더링에 사용될 정사영 행렬을 생성 // 깊이가 없음 (투영행렬을 하지 않음, 원근 x)
+	//직교 행렬
 	_OrthoMatrix = XMMatrixOrthographicLH((float)screenW, (float)screenH, sDepth, sNear);
 }
