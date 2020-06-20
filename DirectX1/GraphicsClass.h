@@ -4,6 +4,11 @@ class D3DClass;
 
 class GraphicsClass
 {
+	bool _Vsync_enabled;
+	float _SDepth;
+	float _SNear;
+
+	D3DClass *_D3DC;
 public:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);
@@ -17,6 +22,6 @@ private:
 	bool Render();
 
 private:
-	D3DClass* mDirect3D;
+	
 };
 
