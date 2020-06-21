@@ -1,6 +1,9 @@
 #pragma once
 
 class D3DClass;
+class Camera;
+class ModelTriangle;
+class ColorShader;
 
 class GraphicsClass
 {
@@ -8,7 +11,12 @@ class GraphicsClass
 	float _SDepth;
 	float _SNear;
 
-	D3DClass *_D3DC;
+private:
+	D3DClass*_D3DC;
+	Camera* _Camera;
+	ModelTriangle* _ModelTriangle;
+	ColorShader* _ColorShader;
+
 public:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);
@@ -19,9 +27,6 @@ public:
 	bool Frame();
 
 private:
-	bool Render();
-
-private:
-	
+	bool Render();	
 };
 

@@ -1,13 +1,19 @@
 #include"Stdafx.h"
 #include "D3DClass.h"
+#include "Camera.h"
+#include "ModelTriangle.h"
+#include "ColorShader.h"
 #include "GraphicsClass.h"
 
 GraphicsClass::GraphicsClass()
 {
 	_SDepth = 1000.0f;
 	_SNear = 0.1f;
-	_D3DC = NULL;
 	_Vsync_enabled = true;
+	_D3DC = NULL;
+	_Camera = NULL;
+	_ModelTriangle = NULL;
+	_ColorShader = NULL;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -31,12 +37,66 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		MessageBox(hWnd, _T("Could not initialize Direct3D"), _T("Error"), MB_OK);
 		return false;
 	}
+	_Camera = new Camera;
+	if (!_Camera) 
+	{
+		MessageBox(hWnd, _T("Camera Error"), _T("Error"), MB_OK);
+		return false;
+	}
+	_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+
+	_ModelTriangle = new ModelTriangle;
+	if (!_ModelTriangle)
+	{
+		MessageBox(hWnd, _T("ModelTriangle Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	result = _ModelTriangle->Initialize(_D3DC->GetDevice());
+	if (!result)
+	{
+		MessageBox(hWnd, _T("ModelTriangle Error"), _T("Error"), MB_OK);
+		return false;
+	}
+	_ColorShader = new ColorShader;
+	if (!_ColorShader)
+	{
+		MessageBox(hWnd, _T("ColorShader Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	result = _ColorShader->Initialize(_D3DC->GetDevice(), hWnd);
+	if (!result)
+	{
+		MessageBox(hWnd, _T("ColorShader Error"), _T("Error"), MB_OK);
+		return false;
+	}
 
 	return true;
 }
 
 void GraphicsClass::Release()
 {
+	if (_ColorShader)
+	{
+		_ColorShader->Release();
+		delete _ColorShader;
+		_ColorShader = NULL;
+	}
+
+	if (_ModelTriangle)
+	{
+		_ModelTriangle->Release();
+		delete _ModelTriangle;
+		_ModelTriangle = NULL;
+	}
+
+	if (_Camera)
+	{
+		delete _Camera;
+		_Camera = NULL;
+	}
+
 	//D3D객체 해제
 	if (_D3DC)
 	{
@@ -44,6 +104,7 @@ void GraphicsClass::Release()
 		delete _D3DC;
 		_D3DC = NULL;
 	}
+
 }
 
 //Message loop 안에 들어있는 Frame
@@ -70,6 +131,21 @@ bool GraphicsClass::Render()
 
 	//화면에 그림을 그리는 Rendering 작업
 	//Camera -> 그릴 대상에 대한 정점 정보
+	_Camera->Render();
+	XMMATRIX worldM, viewM, projectionM;
+	_D3DC->GetWorldMatrix(worldM);
+	_Camera->GetViewMatrix(viewM);
+	_D3DC->GetProjectionMatrix(projectionM);
+
+	_ModelTriangle->Render(_D3DC->GetDeviceContext());
+
+	bool result;
+	result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
+		_ModelTriangle->GetIndexCount(), worldM, viewM, projectionM);
+	if (!result)
+	{
+		return false;
+	}
 
 	//버퍼에 그려진 Scene을 화면에 표시
 	_D3DC->EndScene();

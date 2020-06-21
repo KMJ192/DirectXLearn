@@ -35,5 +35,5 @@ PixelInputType ColorVertexShader(VertexInputType input)
 	//픽셀 쉐이더가 사용할 입력 생상 저장.
 	output.color = input.color;
 
-	return output
+	return output;
 }

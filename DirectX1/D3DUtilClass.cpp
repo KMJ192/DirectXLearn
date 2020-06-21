@@ -21,7 +21,7 @@ void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hWnd, const TCHAR* 
 	for (i = 0; i < bufferSize; i++)
 	{
 		fout << compileErrors[i];
-
+	}
 		//ÆÄÀÏÀ» ´ÝÀ½
 		fout.close();
 
@@ -33,5 +33,5 @@ void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hWnd, const TCHAR* 
 		MessageBox(hWnd, _T("Error compiling shader. Check shader-error.txt for message"), shaderFilename, MB_OK);
 
 		return;
-	}
+
 }
