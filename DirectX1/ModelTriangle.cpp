@@ -68,7 +68,7 @@ bool ModelTriangle::InitializeBuffers(ID3D11Device* device)
 	vertices[1]._Position = XMFLOAT3(0.0f, 1.0f, 0.0f); //상단 가운데
 	vertices[1]._Color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[2]._Position = XMFLOAT3(1.0f, -1.0f, 1.0f); //오른쪽 아래
+	vertices[2]._Position = XMFLOAT3(1.0f, -1.0f, -1.0f); //오른쪽 아래
 	vertices[2]._Color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	indices[0] = 0;//왼쪽 아래
