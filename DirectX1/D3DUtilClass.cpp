@@ -22,16 +22,16 @@ void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hWnd, const TCHAR* 
 	{
 		fout << compileErrors[i];
 	}
-		//파일을 닫음
-		fout.close();
+	//파일을 닫음
+	fout.close();
 
-		//에러 메시지 반환
-		errorMessage->Release();
-		errorMessage = 0;
+	//에러 메시지 반환
+	errorMessage->Release();
+	errorMessage = 0;
 
-		//컴파일 에러가 있음을 팝업 메시지로 알려줌
-		MessageBox(hWnd, _T("Error compiling shader. Check shader-error.txt for message"), shaderFilename, MB_OK);
+	//컴파일 에러가 있음을 팝업 메시지로 알려줌
+	MessageBox(hWnd, _T("Error compiling shader. Check shader-error.txt for message"), shaderFilename, MB_OK);
 
-		return;
+	return;
 
 }

@@ -1,6 +1,7 @@
 #include"Stdafx.h"
 #include "D3DClass.h"
 #include "Camera.h"
+#include "ModelRectangle.h"
 #include "ModelTriangle.h"
 #include "ColorShader.h"
 #include "GraphicsClass.h"
@@ -11,7 +12,9 @@ GraphicsClass::GraphicsClass()
 	_SNear = 0.1f;
 	_Vsync_enabled = true;
 	_D3DC = NULL;
+
 	_Camera = NULL;
+	_ModelRectangle = NULL;
 	_ModelTriangle = NULL;
 	_ColorShader = NULL;
 }
@@ -43,7 +46,7 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		MessageBox(hWnd, _T("Camera Error"), _T("Error"), MB_OK);
 		return false;
 	}
-	_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+	_Camera->SetPosition(0.0f, 0.0f, -7.0f);
 
 	_ModelTriangle = new ModelTriangle;
 	if (!_ModelTriangle)
@@ -58,6 +61,21 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		MessageBox(hWnd, _T("ModelTriangle Error"), _T("Error"), MB_OK);
 		return false;
 	}
+
+	_ModelRectangle = new ModelRectangle;
+	if (!_ModelRectangle)
+	{
+		MessageBox(hWnd, _T("ModelRectangle Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	result = _ModelRectangle->Initialize(_D3DC->GetDevice());
+	if (!result)
+	{
+		MessageBox(hWnd, _T("ModelRectangle Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
 	_ColorShader = new ColorShader;
 	if (!_ColorShader)
 	{
@@ -77,20 +95,29 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 
 void GraphicsClass::Release()
 {
+	//Color 객체 해제
 	if (_ColorShader)
 	{
 		_ColorShader->Release();
 		delete _ColorShader;
 		_ColorShader = NULL;
 	}
-
+	//Triangle객체 해제
 	if (_ModelTriangle)
 	{
 		_ModelTriangle->Release();
 		delete _ModelTriangle;
 		_ModelTriangle = NULL;
 	}
+	
+	if (_ModelRectangle)
+	{
+		_ModelRectangle->Release();
+		delete _ModelRectangle;
+		_ModelRectangle = NULL;
+	}
 
+	//Camera객체 해제
 	if (_Camera)
 	{
 		delete _Camera;
@@ -104,7 +131,6 @@ void GraphicsClass::Release()
 		delete _D3DC;
 		_D3DC = NULL;
 	}
-
 }
 
 //Message loop 안에 들어있는 Frame
@@ -123,25 +149,33 @@ bool GraphicsClass::Frame()
 	return Render();
 }
 
-
 bool GraphicsClass::Render()
 {
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	//씬 그리기를 시작하기 위해 버퍼의 내용을 지움
-	_D3DC->BeginScene(1.0f, 1.0f, 0.0f, 1.0f); //화면 Color 표시
+	_D3DC->BeginScene(0.0f, 1.0f, 1.0f, 0.0f); //화면 Color 표시
 
 	//화면에 그림을 그리는 Rendering 작업
 	//Camera -> 그릴 대상에 대한 정점 정보
 	_Camera->Render();
-	XMMATRIX worldM, viewM, projectionM;
-	_D3DC->GetWorldMatrix(worldM);
-	_Camera->GetViewMatrix(viewM);
-	_D3DC->GetProjectionMatrix(projectionM);
+	_Camera->GetViewMatrix(viewMatrix);
+	_D3DC->GetWorldMatrix(worldMatrix);
+	_D3DC->GetProjectionMatrix(projectionMatrix);
 
-	_ModelTriangle->Render(_D3DC->GetDeviceContext());
+	//_ModelTriangle->Render(_D3DC->GetDeviceContext());
+	_ModelRectangle->Render(_D3DC->GetDeviceContext());
 
 	bool result;
-	result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
-		_ModelTriangle->GetIndexCount(), worldM, viewM, projectionM);
+	//Model Render
+	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
+		_ModelTriangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+	{
+		return false;
+	}*/
+
+	result = _ColorShader->Render(_D3DC->GetDeviceContext(),
+		_ModelRectangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;

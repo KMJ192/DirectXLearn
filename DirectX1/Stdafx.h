@@ -14,6 +14,7 @@
 #include<DirectXMath.h>
 #include<DirectXPackedVector.h>
 
+#include "DirectXTex.h"
 #include "InputClass.h"
 #include "GraphicsClass.h"
 
