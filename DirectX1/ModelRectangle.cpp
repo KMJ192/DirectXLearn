@@ -1,10 +1,12 @@
 #include "Stdafx.h"
+#include "TextureClass.h"
 #include "ModelRectangle.h"
 
 ModelRectangle::ModelRectangle()
 {
-	_VertexCount = NULL;
-	_IndexCount = NULL;
+	_VertexBuffer = NULL;
+	_IndexBuffer = NULL;
+	_TextureC = NULL;
 }
 
 ModelRectangle::ModelRectangle(const ModelRectangle& other)
@@ -15,9 +17,14 @@ ModelRectangle::~ModelRectangle()
 {
 }
 
-bool ModelRectangle::Initialize(ID3D11Device* device)
+bool ModelRectangle::Initialize(ID3D11Device* device, const TCHAR* filename)
 {
+	//삼각형에 대한 Geomatri를 유지하는 꼭지점 및 인덱스 버퍼 초기화
 	if (!InitializeBuffers(device)) 
+		return false;
+
+	//모델의 Texture Load
+	if (!LoadTexture(device, filename))
 		return false;
 
 	return true;
@@ -25,6 +32,7 @@ bool ModelRectangle::Initialize(ID3D11Device* device)
 
 void ModelRectangle::Release()
 {
+	ReleaseTexture();
 	ReleaseBuffers();
 }
 
@@ -36,6 +44,11 @@ void ModelRectangle::Render(ID3D11DeviceContext* deviceContext)
 int ModelRectangle::GetIndexCount()
 {
 	return _IndexCount;
+}
+
+ID3D11ShaderResourceView* ModelRectangle::GetTexture()
+{
+	return _TextureC->GetTexture();
 }
 
 bool ModelRectangle::InitializeBuffers(ID3D11Device* device)
@@ -62,30 +75,35 @@ bool ModelRectangle::InitializeBuffers(ID3D11Device* device)
 	//정점 배열에 값을 넣음
 	//왼쪽 하단
 	vertices[0]._Position = XMFLOAT3(-1.0f, -1.0f, 0.0f);
+	vertices[0]._Texture = XMFLOAT2(0.0f, 1.0f);
 	vertices[0]._Color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	//왼쪽 상단
-	vertices[1]._Position = XMFLOAT3(1.0f, -1.0f, 0.0f); 
+	vertices[1]._Position = XMFLOAT3(-1.0f, 1.0f, 0.0f);
+	vertices[1]._Texture = XMFLOAT2(0.0f, 0.0f);
 	vertices[1]._Color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	//오른쪽 상단
-	vertices[2]._Position = XMFLOAT3(-1.0f, 1.0f, 0.0f); 
+	vertices[2]._Position = XMFLOAT3(1.0f, -1.0f, 0.0f); 
+	vertices[2]._Texture = XMFLOAT2(1.0f, 1.0f);
 	vertices[2]._Color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	//왼쪽 하단
 	vertices[3]._Position = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	vertices[3]._Texture = XMFLOAT2(1.0f, 0.0f);
 	vertices[3]._Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f);
 
 	indices[0] = 0;//왼쪽 아래 
-	indices[1] = 2;//왼쪽 상단
-	indices[2] = 1;//오른쪽 상단
-	indices[3] = 1;//왼쪽 아래
-	indices[4] = 2;//오른쪽 하단
+	indices[1] = 1;//왼쪽 상단
+	indices[2] = 2;//오른쪽 상단
+	indices[3] = 2;//왼쪽 아래
+	indices[4] = 1;//오른쪽 하단
 	indices[5] = 3;//오른쪽 상단
 
 	//정점 버퍼의 Description 작성
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * _VertexCount;
-	vertexBufferDesc.BindFlags = 0;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
 
 	//정점 데이터를 가리키는 보조 리소스 구조체 작성
 	vertexData.pSysMem = vertices;
@@ -126,7 +144,8 @@ bool ModelRectangle::InitializeBuffers(ID3D11Device* device)
 
 void ModelRectangle::ReleaseBuffers()
 {
-	if (_IndexBuffer) {
+	if (_IndexBuffer) 
+	{
 		_IndexBuffer->Release();
 		_IndexBuffer = NULL;
 	}
@@ -153,3 +172,33 @@ void ModelRectangle::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	//정점 버퍼로 그릴 기본형을 설정(3각형 그리기)
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
+
+bool ModelRectangle::LoadTexture(ID3D11Device* device, const TCHAR* filename)
+{
+	bool result;
+
+	//텍스쳐 객체 만들기
+	_TextureC = new TextureClass;
+	if (!_TextureC)
+		return false;
+
+	//텍스쳐 오브젝트 초기화
+	result = _TextureC->Initialize(device, filename);
+	if (!result) 
+		return false;
+
+	return true;
+}
+
+void ModelRectangle::ReleaseTexture()
+{
+	//텍스쳐 객체 해제
+	if (_TextureC)
+	{
+		_TextureC->Release();
+		delete _TextureC;
+		_TextureC = 0;
+	}
+	return;
+}
+

@@ -19,8 +19,6 @@ TextureShader::~TextureShader()
 {
 }
 
-
-
 bool TextureShader::Initialize(ID3D11Device* device, HWND hWnd)
 {
 	bool result;
@@ -40,7 +38,6 @@ void TextureShader::Release()
 bool TextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldM, XMMATRIX viewM, XMMATRIX projectionM, ID3D11ShaderResourceView* texture)
 {
 	bool result;
-
 	result = SetShaderParameters(deviceContext, worldM, viewM, projectionM, texture);
 	if (!result)
 		return false;
@@ -68,7 +65,7 @@ bool TextureShader::InitShader(ID3D11Device* device, HWND hWnd, const TCHAR* vsF
 	pixelShaderBuffer = NULL;
 
 	//정점 셰이더를 컴파일 함
-	result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextrueVertexShader", "vs_5_0",
+	result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS, NULL, &vertexShaderBuffer, &errorMessage);
 	if (FAILED(result)) {
 		if (errorMessage)
@@ -140,7 +137,6 @@ bool TextureShader::InitShader(ID3D11Device* device, HWND hWnd, const TCHAR* vsF
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
-
 
 	//정점 셰이더에 있는 핼렬 상수 버퍼의 description을 작성
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -214,11 +210,56 @@ void TextureShader::ReleaseShader()
 	}
 }
 
-bool TextureShader::SetShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView*)
+bool TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldM, XMMATRIX viewM, XMMATRIX projectionM, ID3D11ShaderResourceView* texture)
 {
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	MatrixBufferType* dataPtr;
+	unsigned int bufferNumber;
+
+	//행렬을 transpose하여 셰이더에서 사용할 수 있게 함
+	worldM = XMMatrixTranspose(worldM);
+	viewM = XMMatrixTranspose(viewM);
+	projectionM = XMMatrixTranspose(projectionM);
+
+	//상수 버퍼의 내용을 쓸 수 있도로 잠금
+	result = deviceContext->Map(_MatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+		return false;
+
+	//상수 버퍼의 데이터에 대한 포인터를 가져옴
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+	//상수 버퍼에 행렬을 복사함
+	//dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+	//상수 버퍼에 행렬을 복사
+	dataPtr->world = worldM;
+	dataPtr->view = viewM;
+	dataPtr->projection = projectionM;
+
+	//상수 버퍼의 잠금 해제
+	deviceContext->Unmap(_MatrixBuffer, 0);
+
+	//정점 셰이더에서의 상수 버퍼의 위치를 설정
+	bufferNumber = 0;
+
+	//마지막으로 정점 셰이더의 상수 버퍼를 바뀐 값으로 바꿈
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &_MatrixBuffer);
+
+	//Set shader texture resource in the pixel shader
+	deviceContext->PSSetShaderResources(0, 1, &texture);
+
 	return true;
 }
 
-void TextureShader::RenderShader(ID3D11DeviceContext*, int)
+void TextureShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
 {
+	deviceContext->IASetInputLayout(_Layout);
+
+	deviceContext->VSSetShader(_VertexShader, NULL, 0);
+	deviceContext->PSSetShader(_PixelShader, NULL, 0);
+
+	deviceContext->PSSetSamplers(0, 1, &_SampleState);
+	deviceContext->DrawIndexed(indexCount, 0, 0);
 }

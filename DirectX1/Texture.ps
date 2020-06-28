@@ -1,5 +1,5 @@
 Texture2D shaderTexture;
-SampleState SampleType;
+SamplerState SampleType;
 //TYPEDEFS
 struct PixelInputType
 {
@@ -9,7 +9,7 @@ struct PixelInputType
 };
 
 //Pixel Shader
-float TexturePixelShader(PixelInputType input) : SV_TARGET
+float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 {
 	float4 textureColor;
 

@@ -4,6 +4,7 @@
 #include "ModelRectangle.h"
 #include "ModelTriangle.h"
 #include "ColorShader.h"
+#include "TextureShader.h"
 #include "GraphicsClass.h"
 
 GraphicsClass::GraphicsClass()
@@ -17,6 +18,7 @@ GraphicsClass::GraphicsClass()
 	_ModelRectangle = NULL;
 	_ModelTriangle = NULL;
 	_ColorShader = NULL;
+	_TextureShader = NULL;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -69,7 +71,7 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		return false;
 	}
 
-	result = _ModelRectangle->Initialize(_D3DC->GetDevice());
+	result = _ModelRectangle->Initialize(_D3DC->GetDevice(), _T("Texture.jpg"));
 	if (!result)
 	{
 		MessageBox(hWnd, _T("ModelRectangle Error"), _T("Error"), MB_OK);
@@ -87,6 +89,19 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 	if (!result)
 	{
 		MessageBox(hWnd, _T("ColorShader Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	_TextureShader = new TextureShader;
+	if (!_TextureShader)
+	{
+		return _TextureShader;
+	}
+
+	result = _TextureShader->Initialize(_D3DC->GetDevice(), hWnd);
+	if (!result)
+	{
+		MessageBox(hWnd, _T("Could not initialize the color textureshader object."), _T("Error"), MB_OK);
 		return false;
 	}
 
@@ -152,34 +167,36 @@ bool GraphicsClass::Frame()
 bool GraphicsClass::Render()
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	bool result = false;
+
 	//씬 그리기를 시작하기 위해 버퍼의 내용을 지움
 	_D3DC->BeginScene(0.0f, 1.0f, 1.0f, 0.0f); //화면 Color 표시
 
 	//화면에 그림을 그리는 Rendering 작업
 	//Camera -> 그릴 대상에 대한 정점 정보
 	_Camera->Render();
+
+	//카메라 및 d3d 객체에서 세계, 뷰 및 투영 행렬 가져오기
 	_Camera->GetViewMatrix(viewMatrix);
 	_D3DC->GetWorldMatrix(worldMatrix);
 	_D3DC->GetProjectionMatrix(projectionMatrix);
 
+	//Model Vertex 및 IndexBuffer를 그래픽 파이프라인에 배치하여 드로잉 준비
 	//_ModelTriangle->Render(_D3DC->GetDeviceContext());
 	_ModelRectangle->Render(_D3DC->GetDeviceContext());
 
-	bool result;
 	//Model Render
 	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
 		_ModelTriangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	if (!result)
-	{
-		return false;
-	}*/
+	*/
 
-	result = _ColorShader->Render(_D3DC->GetDeviceContext(),
-		_ModelRectangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(),
+		_ModelRectangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);*/
+
+	result = _TextureShader->Render(_D3DC->GetDeviceContext(), _ModelRectangle->GetIndexCount(), 
+		worldMatrix, viewMatrix, projectionMatrix, _ModelRectangle->GetTexture());
 	if (!result)
-	{
 		return false;
-	}
 
 	//버퍼에 그려진 Scene을 화면에 표시
 	_D3DC->EndScene();

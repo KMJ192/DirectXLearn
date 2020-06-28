@@ -3,8 +3,8 @@
 
 ModelTriangle::ModelTriangle()
 {
-	_VertexCount = NULL;
-	_IndexCount = NULL;
+	_VertexBuffer = NULL;
+	_IndexBuffer = NULL;
 }
 
 ModelTriangle::ModelTriangle(const ModelTriangle& other)
@@ -81,6 +81,7 @@ bool ModelTriangle::InitializeBuffers(ID3D11Device* device)
 	vertexBufferDesc.BindFlags = 0;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
 	
 	//정점 데이터를 가리키는 보조 리소스 구조체 작성
 	vertexData.pSysMem = vertices;

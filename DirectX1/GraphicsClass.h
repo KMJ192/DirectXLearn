@@ -5,6 +5,7 @@ class Camera;
 class ModelTriangle;
 class ModelRectangle;
 class ColorShader;
+class TextureShader;
 
 class GraphicsClass
 {
@@ -18,6 +19,7 @@ private:
 	ModelTriangle* _ModelTriangle;
 	ModelRectangle* _ModelRectangle;
 	ColorShader* _ColorShader;
+	TextureShader* _TextureShader;
 
 public:
 	GraphicsClass();
