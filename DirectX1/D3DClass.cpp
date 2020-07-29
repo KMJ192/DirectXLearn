@@ -9,8 +9,11 @@ D3DClass::D3DClass()
 	_RenderTargetView = NULL;
 	_DepthStencilBuffer = NULL;
 	_DepthStencilState = NULL;
+	_DepthDisabledStencilState = NULL;
 	_DepthStencilView = NULL;
 	_RasterState = NULL;
+	_AlphaEnableBlendingState = NULL;
+	_AlphaDisableBlendingState = NULL;
 
 	_mEnable4xMsaa = false;
 }
@@ -68,6 +71,14 @@ bool D3DClass::Initialize(int screenW, int screenH, bool vSync, HWND hWnd, bool 
 
 void D3DClass::Release()
 {
+	if (_AlphaEnableBlendingState != NULL) {
+		_AlphaEnableBlendingState->Release();
+		_AlphaEnableBlendingState = NULL;
+	}
+	if (_AlphaDisableBlendingState != NULL) {
+		_AlphaDisableBlendingState->Release();
+		_AlphaDisableBlendingState = NULL;
+	}
 	if (_RasterState != NULL) {
 		_RasterState->Release();
 		_RasterState = NULL;
@@ -79,6 +90,10 @@ void D3DClass::Release()
 	if (_DepthStencilState != NULL) {
 		_DepthStencilState->Release();
 		_DepthStencilState = NULL;
+	}
+	if (_DepthDisabledStencilState != NULL) {
+		_DepthDisabledStencilState->Release();
+		_DepthDisabledStencilState = NULL;
 	}
 	if (_DepthStencilBuffer != NULL) {
 		_DepthStencilBuffer->Release();
@@ -150,6 +165,46 @@ void D3DClass::GetWorldMatrix(XMMATRIX& mat)
 void D3DClass::GetOrthoMatrix(XMMATRIX& mat)
 {
 	mat = _OrthoMatrix;
+}
+
+void D3DClass::TurnZBufferOn()
+{
+}
+
+void D3DClass::TurnZBufferOff()
+{
+}
+
+void D3DClass::EnableAlphaBlending()
+{
+	float blendFactor[4];
+
+	//혼합요소 설정
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+
+	//알파 블렌딩 켜기
+	_DeviceContext->OMSetBlendState(_AlphaEnableBlendingState, blendFactor, 0xffffffff);
+
+	return;
+}
+
+void D3DClass::DisableAlphaBlending()
+{
+	float blendFactor[4];
+
+	//혼합요소 설정
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+
+	//알파 블렌딩 켜기
+	_DeviceContext->OMSetBlendState(_AlphaDisableBlendingState, blendFactor, 0xffffffff);
+
+	return;
 }
 
 bool D3DClass::CreateDeviceNContext()
@@ -331,8 +386,32 @@ bool D3DClass::CreatedepthNStencil(int screenW, int screenH, UINT m4xMsaaQuality
 		MessageBox(NULL, _T("_DepthStencilBuffer Failed"), NULL, MB_OK);
 		return false;
 	}
+
 	//Stencil상태의 description을 초기화
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+	depthStencilDesc.DepthEnable = false;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilReadMask = 0xFF;
+	depthStencilDesc.StencilWriteMask = 0xFF;
+
+	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	
+	//장치를 사용하여 상태 만들기
+	hr = _Device->CreateDepthStencilState(&depthStencilDesc, &_DepthDisabledStencilState);
+	if (FAILED(hr))
+		return false;
+
 	//depthStencilDesc->Buffer를 만드는 설정
 	//Stencil상태의 description을 작성
 	depthStencilDesc.DepthEnable = true;
@@ -407,6 +486,32 @@ bool D3DClass::PiplineBindeing()
 	}
 	//Rasterizer 상태 설정
 	_DeviceContext->RSSetState(_RasterState);
+
+	//블렌드 상태 지우기
+	D3D11_BLEND_DESC blendStateDescription;
+	memset(&blendStateDescription, 0, sizeof(D3D11_BLEND_DESC));
+	//알파 사용 블랜드 상태 만들기.
+	blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	//혼합 상태 만들기
+	hr = _Device->CreateBlendState(&blendStateDescription, &_AlphaEnableBlendingState);
+	if (FAILED(hr)) {
+		return false;
+	}
+	//알파 비활성화 된 블렌드 상태 설명
+	blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+	//혼합 상태 만들기
+	hr = _Device->CreateBlendState(&blendStateDescription, &_AlphaDisableBlendingState);
+	if (FAILED(hr)) {
+		return false;
+	}
 
 	return true;
 }

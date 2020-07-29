@@ -2,6 +2,7 @@
 
 class D3DClass;
 class Camera;
+class SpriteClass;
 class ModelTriangle;
 class ModelRectangle;
 class ColorShader;
@@ -16,8 +17,9 @@ class GraphicsClass
 private:
 	D3DClass*_D3DC;
 	Camera* _Camera;
-	ModelTriangle* _ModelTriangle;
+	SpriteClass* _Sprite;
 	ModelRectangle* _ModelRectangle;
+	ModelTriangle* _ModelTriangle;
 	ColorShader* _ColorShader;
 	TextureShader* _TextureShader;
 

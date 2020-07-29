@@ -1,5 +1,10 @@
 #pragma once
 
+//제공 define
+#define WIN32_LEAN_AND_MEAN
+#define DIRECINPUT_VERSION 0x0800
+
+//필요 생성 define
 #define MAX_KEYS 256
 #define WIN32_LEAN_AND_MEAN
 
@@ -11,6 +16,7 @@
 #include<d3d11.h>
 #include<d3dcommon.h>
 #include<d3dcompiler.h>
+#include<dinput.h>
 #include<DirectXMath.h>
 #include<DirectXPackedVector.h>
 

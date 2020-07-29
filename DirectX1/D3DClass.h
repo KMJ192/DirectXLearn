@@ -10,6 +10,7 @@ private:
 	ID3D11RenderTargetView* _RenderTargetView;
 	ID3D11Texture2D* _DepthStencilBuffer;
 	ID3D11DepthStencilState* _DepthStencilState;
+	ID3D11DepthStencilState* _DepthDisabledStencilState;
 	ID3D11DepthStencilView* _DepthStencilView;
 	ID3D11RasterizerState* _RasterState;
 
@@ -17,6 +18,10 @@ private:
 	XMMATRIX _ProjectionMatrix;
 	XMMATRIX _WorldMatrix;
 	XMMATRIX _OrthoMatrix;
+
+	
+	ID3D11BlendState* _AlphaEnableBlendingState;
+	ID3D11BlendState* _AlphaDisableBlendingState;
 
 public:
 	D3DClass();
@@ -34,6 +39,11 @@ public:
 	void GetProjectionMatrix(XMMATRIX&);
 	void GetWorldMatrix(XMMATRIX&);
 	void GetOrthoMatrix(XMMATRIX&);
+
+	void TurnZBufferOn();
+	void TurnZBufferOff();
+	void EnableAlphaBlending();
+	void DisableAlphaBlending();
 
 private:
 	bool CreateDeviceNContext();

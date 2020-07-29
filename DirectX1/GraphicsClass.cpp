@@ -1,6 +1,7 @@
 #include"Stdafx.h"
 #include "D3DClass.h"
 #include "Camera.h"
+#include "SpriteClass.h"
 #include "ModelRectangle.h"
 #include "ModelTriangle.h"
 #include "ColorShader.h"
@@ -15,6 +16,7 @@ GraphicsClass::GraphicsClass()
 	_D3DC = NULL;
 
 	_Camera = NULL;
+	_Sprite = NULL;
 	_ModelRectangle = NULL;
 	_ModelTriangle = NULL;
 	_ColorShader = NULL;
@@ -78,6 +80,20 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		return false;
 	}
 
+	_Sprite = new SpriteClass;
+	if (!_Sprite)
+	{
+		MessageBox(hWnd, _T("Sprite Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	result = _Sprite->Initialize(_D3DC->GetDevice(), 100, 200, _T("Texture.jpg"), 50, 50);
+	if (!result)
+	{
+		MessageBox(hWnd, _T("_SpriteClass Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
 	_ColorShader = new ColorShader;
 	if (!_ColorShader)
 	{
@@ -132,6 +148,13 @@ void GraphicsClass::Release()
 		_ModelRectangle = NULL;
 	}
 
+	if (_Sprite)
+	{
+		_Sprite->Release();
+		delete _Sprite;
+		_Sprite = NULL;
+	}
+
 	//Camera객체 해제
 	if (_Camera)
 	{
@@ -183,18 +206,19 @@ bool GraphicsClass::Render()
 
 	//Model Vertex 및 IndexBuffer를 그래픽 파이프라인에 배치하여 드로잉 준비
 	//_ModelTriangle->Render(_D3DC->GetDeviceContext());
-	_ModelRectangle->Render(_D3DC->GetDeviceContext());
+	//_ModelRectangle->Render(_D3DC->GetDeviceContext());
+	_Sprite->Render(_D3DC->GetDeviceContext(), 10, 20);
 
 	//Model Render
 	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
-		_ModelTriangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	*/
+		_ModelTriangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);*/
 
 	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(),
 		_ModelRectangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);*/
 
 	result = _TextureShader->Render(_D3DC->GetDeviceContext(), _ModelRectangle->GetIndexCount(), 
 		worldMatrix, viewMatrix, projectionMatrix, _ModelRectangle->GetTexture());
+
 	if (!result)
 		return false;
 
