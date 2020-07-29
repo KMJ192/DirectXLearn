@@ -1,15 +1,38 @@
-﻿  D3DClass.cpp
+﻿  ApplicationClass.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  Camera.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  ColorShader.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  D3DClass.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  D3DUtilClass.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+D:\develop\DirectXLearn\DirectX1\D3DUtilClass.cpp(15,42): warning C4244: '=': 'SIZE_T'에서 'unsigned long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  DInputClass.cpp
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
   GraphicsClass.cpp
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\GraphicsClass.cpp(210,51): error C2660: 'SpriteClass::Render': 함수는 3개의 인수를 사용하지 않습니다.
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\SpriteClass.h(40,7): message : 'SpriteClass::Render' 선언을 참조하십시오.
+D:\develop\DirectXLearn\DirectX1\GraphicsClass.cpp(210,51): error C2660: 'SpriteClass::Render': 함수는 3개의 인수를 사용하지 않습니다.
+D:\develop\DirectXLearn\DirectX1\SpriteClass.h(40,7): message : 'SpriteClass::Render' 선언을 참조하십시오.
+  InputClass.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  ModelRectangle.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  ModelTriangle.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
   SpriteClass.cpp
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\SpriteClass.cpp(191,18): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\SpriteClass.cpp(192,18): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\develop\DirectXLearn\DirectX1\SpriteClass.cpp(191,18): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\develop\DirectXLearn\DirectX1\SpriteClass.cpp(192,18): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   SpriteObjectClass.cpp
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\SpriteObjectClass.cpp(14,16): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-D:\C_C++_Project\sbsGame\DirectX\DirectX1\DirectX1\SpriteObjectClass.cpp(15,15): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\develop\DirectXLearn\DirectX1\SpriteObjectClass.cpp(14,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\develop\DirectXLearn\DirectX1\SpriteObjectClass.cpp(15,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+  TextureClass.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  TextureShader.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  WinMain.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
   코드를 생성하고 있습니다...

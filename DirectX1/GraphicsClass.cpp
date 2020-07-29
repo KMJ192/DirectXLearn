@@ -189,7 +189,7 @@ bool GraphicsClass::Frame()
 
 bool GraphicsClass::Render()
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 	bool result = false;
 
 	//씬 그리기를 시작하기 위해 버퍼의 내용을 지움
@@ -203,11 +203,12 @@ bool GraphicsClass::Render()
 	_Camera->GetViewMatrix(viewMatrix);
 	_D3DC->GetWorldMatrix(worldMatrix);
 	_D3DC->GetProjectionMatrix(projectionMatrix);
+	_D3DC->GetOrthoMatrix(orthoMatrix)
 
 	//Model Vertex 및 IndexBuffer를 그래픽 파이프라인에 배치하여 드로잉 준비
 	//_ModelTriangle->Render(_D3DC->GetDeviceContext());
 	//_ModelRectangle->Render(_D3DC->GetDeviceContext());
-	_Sprite->Render(_D3DC->GetDeviceContext(), 10, 20);
+	//_Sprite->Render(_D3DC, 10, 20);
 
 	//Model Render
 	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(), 

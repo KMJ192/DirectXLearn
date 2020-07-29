@@ -13,17 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Model">
+      <UniqueIdentifier>{c8b6801d-42c4-44c7-9f05-8be0d2e0d977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader">
+      <UniqueIdentifier>{28c88d72-9707-429b-b141-4b392034b824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader\ShaderData">
+      <UniqueIdentifier>{7487f223-d42c-4571-8174-244134d886fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FrameWork">
+      <UniqueIdentifier>{993483d3-e664-46d3-8998-ad29b9e3de06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{49b6ebbd-99c9-4d7c-baa7-5feef687f724}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ApplicationClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="InputClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="WinMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -33,44 +39,44 @@
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ModelTriangle.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="D3DUtilClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelRectangle.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TextureClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DInputClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteObjectClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ModelTriangle.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRectangle.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteClass.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorShader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationClass.cpp">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="InputClass.cpp">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsClass.cpp">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="DInputClass.cpp">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ApplicationClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="InputClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -80,38 +86,55 @@
     <ClInclude Include="Camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ModelTriangle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorShader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="D3DUtilClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelRectangle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureShader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextureClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DInputClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteObjectClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ModelRectangle.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelTriangle.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteClass.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShader.h">
+      <Filter>소스 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorShader.h">
+      <Filter>소스 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationClass.h">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="InputClass.h">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsClass.h">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="DInputClass.h">
+      <Filter>소스 파일\FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Color.vs" />
-    <None Include="Color.ps" />
-    <None Include="Texture.vs" />
-    <None Include="Texture.ps" />
+    <None Include="Color.ps">
+      <Filter>소스 파일\Shader\ShaderData</Filter>
+    </None>
+    <None Include="Color.vs">
+      <Filter>소스 파일\Shader\ShaderData</Filter>
+    </None>
+    <None Include="Texture.ps">
+      <Filter>소스 파일\Shader\ShaderData</Filter>
+    </None>
+    <None Include="Texture.vs">
+      <Filter>소스 파일\Shader\ShaderData</Filter>
+    </None>
   </ItemGroup>
 </Project>
