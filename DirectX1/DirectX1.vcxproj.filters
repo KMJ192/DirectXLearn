@@ -39,13 +39,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="D3DUtilClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TextureClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteObjectClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ModelTriangle.cpp">
@@ -75,6 +69,12 @@
     <ClCompile Include="DInputClass.cpp">
       <Filter>소스 파일\FrameWork</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteObjectClass.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelFileInfoClass.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -90,9 +90,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextureClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteObjectClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ModelRectangle.h">
@@ -121,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="DInputClass.h">
       <Filter>소스 파일\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteObjectClass.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelFileInfoClass.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectEnumHelper.h">
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

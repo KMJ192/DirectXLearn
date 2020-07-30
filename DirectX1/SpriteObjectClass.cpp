@@ -2,6 +2,7 @@
 #include "D3DClass.h"
 #include "TextureShader.h"
 #include "SpriteClass.h"
+#include "ObjectEnumHelper.h"
 #include "SpriteObjectClass.h"
 
 SpriteObjectClass::SpriteObjectClass()

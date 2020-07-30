@@ -148,10 +148,10 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorShader.cpp" />
     <ClCompile Include="D3DClass.cpp" />
-    <ClCompile Include="D3DUtilClass.cpp" />
     <ClCompile Include="DInputClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
+    <ClCompile Include="ModelFileInfoClass.cpp" />
     <ClCompile Include="ModelRectangle.cpp" />
     <ClCompile Include="ModelTriangle.cpp" />
     <ClCompile Include="SpriteClass.cpp" />
@@ -169,8 +169,10 @@
     <ClInclude Include="DInputClass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
+    <ClInclude Include="ModelFileInfoClass.h" />
     <ClInclude Include="ModelRectangle.h" />
     <ClInclude Include="ModelTriangle.h" />
+    <ClInclude Include="ObjectEnumHelper.h" />
     <ClInclude Include="SpriteClass.h" />
     <ClInclude Include="SpriteObjectClass.h" />
     <ClInclude Include="Stdafx.h" />

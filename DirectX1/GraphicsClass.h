@@ -3,10 +3,12 @@
 class D3DClass;
 class Camera;
 class SpriteClass;
-class ModelTriangle;
-class ModelRectangle;
+//class ModelTriangle;
+//class ModelRectangle;
 class ColorShader;
 class TextureShader;
+class SpriteObjectClass;
+
 
 class GraphicsClass
 {
@@ -17,11 +19,10 @@ class GraphicsClass
 private:
 	D3DClass*_D3DC;
 	Camera* _Camera;
-	SpriteClass* _Sprite;
-	ModelRectangle* _ModelRectangle;
-	ModelTriangle* _ModelTriangle;
 	ColorShader* _ColorShader;
 	TextureShader* _TextureShader;
+
+	SpriteObjectClass* _SpriteObj;
 
 public:
 	GraphicsClass();

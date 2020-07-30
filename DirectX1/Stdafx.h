@@ -12,10 +12,12 @@
 #include<Windows.h>
 #include<tchar.h>
 #include <iostream>
+#include <fstream>
+#include <Pdh.h>
 
 #include<d3d11.h>
 #include<d3dcommon.h>
-#include<d3dcompiler.h>
+#include<D3Dcompiler.h>
 #include<dinput.h>
 #include<DirectXMath.h>
 #include<DirectXPackedVector.h>

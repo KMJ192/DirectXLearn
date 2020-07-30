@@ -17,7 +17,6 @@ class TextureShader
 	bool InitShader(ID3D11Device*, HWND, const TCHAR*, const TCHAR*);
 	void ReleaseShader();
 	bool SetShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView*);
-
 	void RenderShader(ID3D11DeviceContext*, int);
 
 public:

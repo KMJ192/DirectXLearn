@@ -1,26 +1,25 @@
 #include"Stdafx.h"
 #include "D3DClass.h"
 #include "Camera.h"
-#include "SpriteClass.h"
-#include "ModelRectangle.h"
-#include "ModelTriangle.h"
+//#include "ModelRectangle.h"
+//#include "ModelTriangle.h"
 #include "ColorShader.h"
 #include "TextureShader.h"
 #include "GraphicsClass.h"
+#include "SpriteObjectClass.h"
 
 GraphicsClass::GraphicsClass()
 {
 	_SDepth = 1000.0f;
 	_SNear = 0.1f;
-	_Vsync_enabled = true;
 	_D3DC = NULL;
+	_Vsync_enabled = true;
 
 	_Camera = NULL;
-	_Sprite = NULL;
-	_ModelRectangle = NULL;
-	_ModelTriangle = NULL;
 	_ColorShader = NULL;
 	_TextureShader = NULL;
+
+	_SpriteObj = NULL;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -52,48 +51,6 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 	}
 	_Camera->SetPosition(0.0f, 0.0f, -7.0f);
 
-	_ModelTriangle = new ModelTriangle;
-	if (!_ModelTriangle)
-	{
-		MessageBox(hWnd, _T("ModelTriangle Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
-	result = _ModelTriangle->Initialize(_D3DC->GetDevice());
-	if (!result)
-	{
-		MessageBox(hWnd, _T("ModelTriangle Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
-	_ModelRectangle = new ModelRectangle;
-	if (!_ModelRectangle)
-	{
-		MessageBox(hWnd, _T("ModelRectangle Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
-	result = _ModelRectangle->Initialize(_D3DC->GetDevice(), _T("Texture.jpg"));
-	if (!result)
-	{
-		MessageBox(hWnd, _T("ModelRectangle Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
-	_Sprite = new SpriteClass;
-	if (!_Sprite)
-	{
-		MessageBox(hWnd, _T("Sprite Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
-	result = _Sprite->Initialize(_D3DC->GetDevice(), 100, 200, _T("Texture.jpg"), 50, 50);
-	if (!result)
-	{
-		MessageBox(hWnd, _T("_SpriteClass Error"), _T("Error"), MB_OK);
-		return false;
-	}
-
 	_ColorShader = new ColorShader;
 	if (!_ColorShader)
 	{
@@ -121,11 +78,39 @@ bool GraphicsClass::Initialize(int screenW, int screenH, HWND hWnd, bool isFullS
 		return false;
 	}
 
+	_SpriteObj = new SpriteObjectClass;
+	if (!_SpriteObj)
+	{
+		MessageBox(hWnd, _T("Sprite Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
+	result = _SpriteObj->Initialize(hWnd, _D3DC->GetDevice(), screenW, screenH, 100, 100, L"Data\\Texture.jpg");
+	if (!result)
+	{
+		MessageBox(hWnd, _T("_SpriteClass Error"), _T("Error"), MB_OK);
+		return false;
+	}
+
 	return true;
 }
 
 void GraphicsClass::Release()
 {
+	if (_SpriteObj)
+	{
+		_SpriteObj->Release();
+		delete _SpriteObj;
+		_SpriteObj = NULL;
+	}
+
+	if (_TextureShader)
+	{
+		_TextureShader->Release();
+		delete _TextureShader;
+		_TextureShader = NULL;
+	}
+
 	//Color 객체 해제
 	if (_ColorShader)
 	{
@@ -133,28 +118,7 @@ void GraphicsClass::Release()
 		delete _ColorShader;
 		_ColorShader = NULL;
 	}
-	//Triangle객체 해제
-	if (_ModelTriangle)
-	{
-		_ModelTriangle->Release();
-		delete _ModelTriangle;
-		_ModelTriangle = NULL;
-	}
 	
-	if (_ModelRectangle)
-	{
-		_ModelRectangle->Release();
-		delete _ModelRectangle;
-		_ModelRectangle = NULL;
-	}
-
-	if (_Sprite)
-	{
-		_Sprite->Release();
-		delete _Sprite;
-		_Sprite = NULL;
-	}
-
 	//Camera객체 해제
 	if (_Camera)
 	{
@@ -175,10 +139,8 @@ void GraphicsClass::Release()
 bool GraphicsClass::Frame()
 {
 	bool result = false;
-	//연산 수행
-	//---------------------------------------
 
-	//---------------------------------------
+
 	//그래픽 렌더링 수행
 	result = Render();
 	if (!result) 
@@ -203,25 +165,19 @@ bool GraphicsClass::Render()
 	_Camera->GetViewMatrix(viewMatrix);
 	_D3DC->GetWorldMatrix(worldMatrix);
 	_D3DC->GetProjectionMatrix(projectionMatrix);
-	_D3DC->GetOrthoMatrix(orthoMatrix)
+	_D3DC->GetOrthoMatrix(orthoMatrix);
 
-	//Model Vertex 및 IndexBuffer를 그래픽 파이프라인에 배치하여 드로잉 준비
-	//_ModelTriangle->Render(_D3DC->GetDeviceContext());
-	//_ModelRectangle->Render(_D3DC->GetDeviceContext());
-	//_Sprite->Render(_D3DC, 10, 20);
-
-	//Model Render
-	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(), 
-		_ModelTriangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);*/
-
-	/*result = _ColorShader->Render(_D3DC->GetDeviceContext(),
-		_ModelRectangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);*/
-
-	result = _TextureShader->Render(_D3DC->GetDeviceContext(), _ModelRectangle->GetIndexCount(), 
-		worldMatrix, viewMatrix, projectionMatrix, _ModelRectangle->GetTexture());
 
 	if (!result)
 		return false;
+
+	_D3DC->TurnZBufferOff();
+
+	_SpriteObj->Render(_D3DC, worldMatrix, viewMatrix, orthoMatrix, _TextureShader);
+
+	_D3DC->TurnZBufferOn();
+
+	_D3DC->EndScene();
 
 	//버퍼에 그려진 Scene을 화면에 표시
 	_D3DC->EndScene();

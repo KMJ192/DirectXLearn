@@ -3,8 +3,9 @@
 class D3DClass;
 class TextureShader;
 class SpriteClass;
+#include "ModelFileInfoClass.h"
 
-class SpriteObjectClass
+class SpriteObjectClass : public ModelFileInfoClass
 {
 	float _MoveSpeed;
 	float _PosX;

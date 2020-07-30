@@ -19,7 +19,6 @@ private:
 	XMMATRIX _WorldMatrix;
 	XMMATRIX _OrthoMatrix;
 
-	
 	ID3D11BlendState* _AlphaEnableBlendingState;
 	ID3D11BlendState* _AlphaDisableBlendingState;
 
